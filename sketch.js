@@ -1,15 +1,17 @@
 const Engine = Matter.Engine;
 const World= Matter.World;
 const Bodies = Matter.Bodies;
+const Constraint=Matter.Constraint;
 
 var engine, world;
 var box1, pig1;
 var backgroundImg,platform;
+var logC;
 
 function preload() {
     backgroundImg = loadImage("sprites/bg.png");
 }
-
+var joint;
 function setup(){
     var canvas = createCanvas(1200,400);
     engine = Engine.create();
@@ -35,6 +37,18 @@ function setup(){
     log5 = new Log(870,120,150, -PI/7);
 
     bird = new Bird(100,100);
+    logC=new Log(100,100,100,PI/2);
+
+    var options={
+        bodyA:bird.body,
+        bodyB:logC.body,
+        length:10,
+        stiffness:0.01
+    }
+
+
+joint=Constraint.create(options);
+World.add(world,joint)
 
 }
 
@@ -61,4 +75,7 @@ function draw(){
 
     bird.display();
     platform.display();
+    logC.display();
+    strokeWeight(3)
+    line(bird.body.position.x,bird.body.position.y,logC.body.position.x,logC.body.position.y)
 }
